@@ -9,6 +9,7 @@ public class Counter extends JFrame {
     private int actualValue;
     private int timerValue;
     private JLabel valueLabel;
+    private JLabel timerLabel;
     private JTextField timerField;
     private Timer countdownTimer;
 
@@ -19,6 +20,7 @@ public class Counter extends JFrame {
         // Initialize components
         valueLabel = new JLabel("Value: " + actualValue);
         timerField = new JTextField(5);
+        timerLabel = new JLabel("Timer: " + timerValue);
 
         // Create buttons
         JButton plusButton = new JButton("+");
@@ -30,7 +32,7 @@ public class Counter extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 actualValue++;
-                updateLabel();
+                updateCounterLabel();
             }
         });
 
@@ -38,17 +40,17 @@ public class Counter extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 actualValue--;
-                updateLabel();
+                updateCounterLabel();
             }
         });
-
+//TODO:  protect against input spam
         setButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     timerValue = Integer.parseInt(timerField.getText());
                     startCountdownTimer();
-                    JOptionPane.showMessageDialog(null, "Timer set to: " + timerValue);
+                    //JOptionPane.showMessageDialog(null, "Timer set to: " + timerValue);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Please enter a valid number for timer.");
                 }
@@ -58,6 +60,7 @@ public class Counter extends JFrame {
         // Create panel and add components
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
+        panel.add(timerLabel);
         panel.add(valueLabel);
         panel.add(plusButton);
         panel.add(minusButton);
@@ -76,8 +79,11 @@ public class Counter extends JFrame {
         setVisible(true);
     }
 
-    private void updateLabel() {
+    private void updateCounterLabel() {
         valueLabel.setText("Value: " + actualValue);
+    }
+    private void updateTimerLabel() {
+        timerLabel.setText("Timer: " + timerValue);
     }
 
     private void startCountdownTimer() {
@@ -87,9 +93,11 @@ public class Counter extends JFrame {
             public void run() {
                 if (timerValue > 0) {
                     timerValue--;
-                    JOptionPane.showMessageDialog(null, "Timer: " + timerValue);
+                    //JOptionPane.showMessageDialog(null, "Timer: " + timerValue);
+                    updateTimerLabel();
+
                 } else {
-                    JOptionPane.showMessageDialog(null, "Timer finished!");
+                    JOptionPane.showMessageDialog(null, "Timer double fininshed!");
                     countdownTimer.cancel();
                 }
             }
